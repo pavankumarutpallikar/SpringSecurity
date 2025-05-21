@@ -1,0 +1,5 @@
+package com.ltimindtree.rest;
+
+public class SecurityRestController {
+
+}
