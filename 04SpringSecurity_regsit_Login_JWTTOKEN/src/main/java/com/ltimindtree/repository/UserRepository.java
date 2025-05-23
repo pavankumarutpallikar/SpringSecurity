@@ -6,5 +6,5 @@ import com.ltimindtree.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
-	public UserEntity findByUaerName(String userName);
+	public UserEntity findByUsername(String username);
 }

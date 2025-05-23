@@ -5,15 +5,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ltimindtree.binding.AuthenticateRequest;
 import com.ltimindtree.entity.UserEntity;
+import com.ltimindtree.service.JWTTokenService;
 import com.ltimindtree.service.MyUserDetailsService;
 
 @RestController
+@RequestMapping("/api")
 public class UserRestController {
 
 	@Autowired
@@ -24,6 +28,9 @@ public class UserRestController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private JWTTokenService jwtTokenService;
 
 	@PostMapping("/register")
 	public String regiterUser(UserEntity user) {
@@ -37,6 +44,7 @@ public class UserRestController {
 		}
 	}
 
+	@PostMapping("/login")
 	public String userAuthenticate(@RequestBody AuthenticateRequest authenticateRequest) {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
 				authenticateRequest.getUserName(), authenticateRequest.getUserPassword());
@@ -44,9 +52,14 @@ public class UserRestController {
 
 		if (authenticated.isAuthenticated()) {
 			// generate jwt token
-			return "valid credentials";
+			return jwtTokenService.generateToken(authenticateRequest.getUserName());
 		} else {
 			return "Invalid credentials";
 		}
+	}
+	
+	@GetMapping("/welcome")
+	public String welcome() {
+		return "Welcome to Wipro Limited";
 	}
 }

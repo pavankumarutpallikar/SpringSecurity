@@ -21,13 +21,13 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		UserEntity userEntity = userRepository.findByUaerName(username);
+		UserEntity userEntity = userRepository.findByUsername(username);
 		return new User(userEntity.getUserName(), userEntity.getUserPassword(), Collections.emptyList());
 	}
 
 	public boolean save(UserEntity user) {
-
-		return false;
+		userRepository.save(user);
+		return user.getUserId()!=null;
 
 	}
 
